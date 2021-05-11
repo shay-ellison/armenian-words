@@ -103,14 +103,6 @@ def main():
     def tryword(word):
         print(word + ":", romanize(word))
 
-    tryword("հաշիվ")
-    tryword("հասկանում")
-    tryword("ո")
-    tryword("ու")
-    tryword("ոո")
-    tryword("ևև")
-    tryword("եե")
-
     for word in TEST_BANK:
         tryword(word)
 
