@@ -41,6 +41,8 @@ LOWER_MAPPING = {
     'և': ('yev', 'ev'),
 }
 
+DIR = '../armenian_lists'
+
 # special case these
 # 'ՈՒ/ու': 'u',
 # 'և/և': 'yev/ev',   # ord() /1415
@@ -98,9 +100,9 @@ def romanize_text_file(file_path):
         print('------------')
         
 def main():
-    for filename in os.listdir('armenian_lists'):
+    for filename in os.listdir(DIR):
         if filename.endswith(".txt"):
-            file_path = f"armenian_lists\{filename}"
+            file_path = os.path.join(DIR, filename)
             romanize_text_file(file_path)
 
 if __name__ == '__main__':

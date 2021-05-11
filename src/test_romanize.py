@@ -31,20 +31,19 @@ class TestRomanize(unittest.TestCase):
         ]
         i = 0
         while i < len(TEST_BANK_ARM):
-            self.assertEqual(romanize(TEST_BANK_ARM[i]), TEST_BANK_ROMAN[i])
+            assert(romanize(TEST_BANK_ARM[i]), TEST_BANK_ROMAN[i])
             print("Correctly romanized " + TEST_BANK_ARM[i] + " ---> "+ TEST_BANK_ROMAN[i])
             i += 1
 
 
     def test_corner_cases(self):
-        self.assertEqual('foo'.upper(), 'FOO')
-        self.assertEqual(romanize('հաշիվ'), 'hashiv')
-        self.assertEqual(romanize('հասկանում'), 'haskanum')
-        self.assertEqual(romanize('ո'), 'vo')
-        self.assertEqual(romanize('ու'), 'u')
-        self.assertEqual(romanize('ոո'), 'voo')
-        self.assertEqual(romanize('ևև'), 'yevev')
-        self.assertEqual(romanize('եե'), 'yee')
+        assert(romanize('հաշիվ'), 'hashiv')
+        assert(romanize('հասկանում'), 'haskanum')
+        assert(romanize('ո'), 'vo')
+        assert(romanize('ու'), 'u')
+        assert(romanize('ոո'), 'voo')
+        assert(romanize('ևև'), 'yevev')
+        assert(romanize('եե'), 'yee')
 
 if __name__ == '__main__':
     unittest.main()
