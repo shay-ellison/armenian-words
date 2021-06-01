@@ -1,3 +1,6 @@
+import os
+import sys
+
 LOWER_MAPPING = {
     'ա': 'a',
     'բ': 'b',
@@ -38,6 +41,9 @@ LOWER_MAPPING = {
     'ֆ': 'f',
     'և': ('yev', 'ev'),
 }
+
+SRC_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(SRC_DIR)
 
 # special case these
 # 'ՈՒ/ու': 'u',
@@ -86,33 +92,38 @@ def romanize(armenian_word: str) -> str:
     return ''.join(new_word)
 
 
-TEST_BANK = [
-    'անկյուն', 'մրջյուն', 'խնձոր', 'կամար', 'բազուկ', 'բանակ', 'երեխա', 'պայուսակ', 
-    'գնդակ', 'նվագախումբ', 'ավազան', 'զամբյուղ', 'բաղնիք', 'մահճակալ', 'մեղու', 'զանգ', 
-    'հատապտուղ', 'թռչուն', 'բերան', 'տախտակ', 'նավակ', 'ոսկոր', 'գիրք', 'սկուտեղ', 'շիշ', 
-    'տուփ', 'տղա', 'ուղեղ', 'արգելակ', 'ճյուղ', 'աղյուս', 'կամուրջ', 'խոզանակ', 'դույլ', 'լամպ', 'կոճակ', 
-    'տորթ', 'տեսախցիկ', 'քարտ', 'սայլ', 'կառք', 'կատու', 'շղթա', 'պանիր', 'կրծքավանդակ', 'կզակ', 'եկեղեցի', 'շրջան', 
-    'ժամացույց', 'ամպ', 'վերարկու', 'մանյակ', 'սանր', 'լար', 'կով', 'բաժակ', 'վարագույր', 'բարձ', 'շուն', 'դուռ', 
-    'արտահոսք', 'գզրոց', 'զգեստ', 'կաթիլ', 'ականջ', 'ձու', 'շարժիչ', 'աչք', 'դեմք', 'ֆերմա', 'փետուր', 'մատ', 
-    'ձուկ', 'դրոշ', 'հատակ', 'ճանճ', 'ոտք', 'պատառաքաղ', 'թռչուն', 'շրջանակ', 'պարտեզ', 'աղջիկ', 'ձեռնոց', 
-    'այծ', 'ատրճանակ', 'մազեր', 'մուրճ', 'ձեռք', 'գլխարկ'
-]
+def romanize_text_file(filepath, save=False):
+    with open(filepath, 'r', encoding="utf8") as f:
+        print("FILE: ", filepath)
+        print("_________________")
+        words = f.readlines()
 
+    romanized_words = []
+    for word in words:
+        word = word.strip()
+        romanized_word = romanize(word)
+        print(word + ": " + romanized_word)
+        print('------------')
+        romanized_words.append(romanized_word)
+
+    if save:
+        path_to, filename = os.path.split(filepath)
+        out_filename = "romanized_" + filename
+        out_filepath = os.path.join(path_to, out_filename)
+        with open(out_filepath, 'w', encoding='utf-8') as out_file:
+            out_file.writelines(word + '\n' for word in romanized_words)
+
+    return romanized_words
+ 
 
 def main():
-    def tryword(word):
-        print(word + ":", romanize(word))
+    if len(sys.argv) > 1:
+        filename = sys.argv[1]
+    else:
+        filename = "words.txt"
+    file_path = os.path.join(PROJECT_DIR, filename)
+    romanize_text_file(file_path, save=True)
 
-    tryword("հաշիվ")
-    tryword("հասկանում")
-    tryword("ո")
-    tryword("ու")
-    tryword("ոո")
-    tryword("ևև")
-    tryword("եե")
-
-    for word in TEST_BANK:
-        tryword(word)
 
 if __name__ == '__main__':
-    main()    
+    main()
