@@ -1,7 +1,9 @@
 import os
 import sys
+from typing import List
 
 LOWER_MAPPING = {
+    ' ': ' ',  # Simplest way to introduce a space
     'ա': 'a',
     'բ': 'b',
     'գ': 'g',
@@ -92,15 +94,36 @@ def romanize(armenian_word: str) -> str:
     return ''.join(new_word)
 
 
-def romanize_text_file(filepath, save=False):
-    with open(filepath, 'r', encoding="utf8") as f:
-        print("FILE: ", filepath)
-        print("_________________")
+def clean_words_file(filepath: str, save=False) -> List[str]:
+    """Clean up the Armenian words in a words file"""
+    with open(filepath, 'r', encoding="utf8") as f:        
+        words = f.readlines()
+
+    def clean_words():
+        for word in words:
+            word = word.strip()
+            cleaned_word = word.lower()
+            if word != cleaned_word:
+                print(f"word: {word} | cleaned: {cleaned_word}")
+            yield cleaned_word
+
+    if save:
+        with open(filepath, 'w', encoding="utf8") as f:
+            for cleaned_word in clean_words():
+                f.write(cleaned_word + '\n')
+    else:
+        for _ in clean_words():
+            pass
+
+
+def romanize_text_file(filepath: str, save=False):
+    """Romanize the Armenian words in a words file"""
+    with open(filepath, 'r', encoding="utf8") as f:        
         words = f.readlines()
 
     romanized_words = []
     for word in words:
-        word = word.strip()
+        word = word.strip().lower()
         romanized_word = romanize(word)
         print(word + ": " + romanized_word)
         print('------------')
@@ -122,7 +145,10 @@ def main():
     else:
         filename = "words.txt"
     file_path = os.path.join(PROJECT_DIR, filename)
+    clean_words_file(file_path, save=True)
+    print("=== Cleaned Words File ===")
     romanize_text_file(file_path, save=True)
+    print("=== Romanized Words File ===")
 
 
 if __name__ == '__main__':
