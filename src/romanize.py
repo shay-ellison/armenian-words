@@ -3,7 +3,6 @@ import sys
 from typing import List
 
 LOWER_MAPPING = {
-    ' ': ' ',  # Simplest way to introduce a space
     'ա': 'a',
     'բ': 'b',
     'գ': 'g',
@@ -102,6 +101,8 @@ def clean_words_file(filepath: str, save=False) -> List[str]:
     def clean_words():
         for word in words:
             word = word.strip()
+            if ' ' in word:
+                continue    
             cleaned_word = word.lower()
             if word != cleaned_word:
                 print(f"word: {word} | cleaned: {cleaned_word}")

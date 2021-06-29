@@ -173,9 +173,7 @@ seghan
 poch
 t'el
 kokord
-but' mat
 toms
-votk'i mat
 lezu
 atam
 k'aghak'
@@ -760,10 +758,8 @@ unenal
 asel
 tesnel
 ugharkel
-karogh e
 kamk'
 masin
-ayn koghm
 heto
 dem
 mej
@@ -794,7 +790,6 @@ k'ich
 shat
 voch
 ayl
-mi k'ani
 aydpisi
 vor
 sa
@@ -840,5 +835,4 @@ hyusis
 harav
 arevelk'
 arevmutk'
-khndrum em
 ayo
