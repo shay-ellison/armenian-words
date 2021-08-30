@@ -1,3 +1,4 @@
+import csv
 import os
 import sys
 from typing import List
@@ -93,61 +94,63 @@ def romanize(armenian_word: str) -> str:
     return ''.join(new_word)
 
 
-def clean_words_file(filepath: str, save=False) -> List[str]:
-    """Clean up the Armenian words in a words file"""
-    with open(filepath, 'r', encoding="utf8") as f:        
-        words = f.readlines()
-
-    def clean_words():
-        for word in words:
-            word = word.strip()
-            if ' ' in word:
-                continue    
-            cleaned_word = word.lower()
-            if word != cleaned_word:
-                print(f"word: {word} | cleaned: {cleaned_word}")
-            yield cleaned_word
-
-    if save:
-        with open(filepath, 'w', encoding="utf8") as f:
-            for cleaned_word in clean_words():
-                f.write(cleaned_word + '\n')
-    else:
-        for _ in clean_words():
-            pass
-
-
 def romanize_text_file(filepath: str, save=False):
-    """Romanize the Armenian words in a words file"""
-    with open(filepath, 'r', encoding="utf8") as f:        
-        words = f.readlines()
+    """Romanize the Armenian words in a words csv file (eng, arm, cat)"""
+    words = {}
 
+    # Read in the Armenian words
+    armenian_words = []
     romanized_words = []
-    for word in words:
-        word = word.strip().lower()
-        romanized_word = romanize(word)
-        print(word + ": " + romanized_word)
-        print('------------')
-        romanized_words.append(romanized_word)
+
+    with open(filepath, 'r', encoding="utf8") as f:
+        reader = csv.reader(f)
+        header = next(reader)
+        for line in reader:
+            eng_word = line[0].strip().lower()
+            arm_word = line[1].strip().lower()
+            category = line[2]
+            armenian_words.append(arm_word)
+            romanized_word = romanize(arm_word)
+            romanized_words.append(romanized_word)
+            words[arm_word] = (eng_word, romanized_word)
 
     if save:
         path_to, filename = os.path.split(filepath)
-        out_filename = "romanized_" + filename
+        filename, extension = os.path.splitext(filename)
+
+        # Save out the Armenian words
+        out_filename = "armenian_words.txt"
+        out_filepath = os.path.join(path_to, out_filename)
+        with open(out_filepath, 'w', encoding='utf-8') as out_file:
+            out_file.writelines(word + '\n' for word in armenian_words)
+
+
+        out_filename = "romanized_words.txt"
         out_filepath = os.path.join(path_to, out_filename)
         with open(out_filepath, 'w', encoding='utf-8') as out_file:
             out_file.writelines(word + '\n' for word in romanized_words)
 
+        # Write a new CSV with everything
+        out_filename = "eng_arm_rom.csv"
+        with open(out_filename, 'w', encoding='utf-8', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['ENGLISH', 'ARMENIAN', 'ROMANIZED'])
+            for arm_word, other_words in words.items():
+                eng_word, romanized_word = other_words
+                # eng, arm, romanized
+                writer.writerow([eng_word, arm_word, romanized_word])
+
     return romanized_words
  
-
 def main():
+
     if len(sys.argv) > 1:
         filename = sys.argv[1]
     else:
         filename = "words.txt"
     file_path = os.path.join(PROJECT_DIR, filename)
-    clean_words_file(file_path, save=True)
-    print("=== Cleaned Words File ===")
+    # clean_words_file(file_path, save=True)
+    # print("=== Cleaned Words File ===")
     romanize_text_file(file_path, save=True)
     print("=== Romanized Words File ===")
 

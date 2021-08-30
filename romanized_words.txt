@@ -758,6 +758,7 @@ unenal
 asel
 tesnel
 ugharkel
+karoghanal
 kamk'
 masin
 heto
@@ -835,4 +836,5 @@ hyusis
 harav
 arevelk'
 arevmutk'
+khndrem
 ayo
